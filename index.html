@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>        
+    </head>
+    <body>
+        <div id="result"></div>
+        <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase-database.js"></script>
+        <script>
+            alert(1);
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyBS1I2U-AbCYdrY-48pD-VlLKIyuIkUY3w",
+                authDomain: "rsl-ticketing.firebaseapp.com",
+                databaseURL: "https://rsl-ticketing.firebaseio.com",
+                projectId: "rsl-ticketing",
+                storageBucket: "",
+                messagingSenderId: "247308713899"
+            };
+            firebase.initializeApp(config);
+
+            var tripsRef = firebase.database().ref("trips");
+            tripsRef.on("child_added", function(snap) {
+                snap.forEach(function(child) {
+                    child.forEach(function(sub) {
+                        var tripseat = {
+                            "CollectorId" : sub.val().CollectorId,
+                            "TicketNo" : sub.val().TicketNo,
+                            "InvoiceId" : sub.val().InvocieId,
+                            "TicketTypeiD" : sub.val().TicketTypeId,
+                            "HashCode" : sub.val().HashCode,
+                            "UserId" : sub.val().UserId,
+                            "TripSeatId" : sub.val().TripSeatId
+                        };
+                        
+                        document.getElementById("result").append("<br>" + JSON.stringify(tripseat));
+                    });
+                });
+            });
+
+            /*
+            var result = {
+                    "routename": "",
+                    "seats": [],
+                    "tripdate": "",
+                    "tripid": "0",
+                    "vesselname": ""
+                };
+
+
+            firebase.database().ref("trips/2040").once("value").then(function(snapshot) {
+ 
+                result.routename = snapshot.val().routename;
+                result.tripdate = snapshot.val().tripdate;
+                result.tripid = snapshot.val().tripid;
+                result.vesselname = snapshot.val().vesselname;
+
+                //alert(JSON.stringify(result));
+
+                snapshot.child("seats").forEach(function(child) {
+                    var seat = {
+                        "seatstatus": "0",
+                        "seatno": "0",
+                        "tripseatid": "0"
+                    };
+                    seat.seatstatus = child.val().seatstatus;
+                    seat.seatno = child.val().seatno;
+                    seat.tripseatid = child.val().tripseatid;
+                    //alert(JSON.stringify(seat));
+                    result.seats.push(seat);
+                });
+
+                //alert(JSON.stringify(result));
+                document.getElementById("result").innerHTML = JSON.stringify(result);
+                //alert(JSON.stringify(result));
+
+                $.ajax({
+                    type: "POST",                
+                    url: '',
+                    data: result,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (message) {
+                            alert("success");
+                            alert(JSON.stringify(message));
+                            document.getElementById("result").innerHTML = JSON.stringify(message);
+                        },
+                    error: function (message) {
+                            document.getElementById("error").innerHTML = JSON.stringify(message);
+                        }
+                });
+            });
+            */
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+                crossorigin="anonymous"></script>
+    </body>
+</html>
